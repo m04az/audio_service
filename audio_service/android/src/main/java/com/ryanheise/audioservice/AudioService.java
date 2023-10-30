@@ -343,6 +343,9 @@ public class AudioService extends MediaBrowserServiceCompat {
 
         flutterEngine = AudioServicePlugin.getFlutterEngine(this);
         System.out.println("flutterEngine warmed up");
+        if (listener != null) {
+            listener.onCreate();
+        }
     }
 
     @Override
@@ -833,7 +836,7 @@ public class AudioService extends MediaBrowserServiceCompat {
         // The response must be given synchronously, and we can't get a
         // synchronous response from the Dart layer. For now, we hardcode
         // the root to "root". This may improve in media2.
-        //return listener.onGetRoot(clientPackageName, clientUid, rootHints);
+        return listener.onGetRoot(clientPackageName, clientUid, rootHints);
     }
 
     @Override
@@ -1119,7 +1122,7 @@ public class AudioService extends MediaBrowserServiceCompat {
     }
 
     public interface ServiceListener {
-        //BrowserRoot onGetRoot(String clientPackageName, int clientUid, Bundle rootHints);
+        BrowserRoot onGetRoot(String clientPackageName, int clientUid, Bundle rootHints);
         void onLoadChildren(String parentMediaId, Result<List<MediaBrowserCompat.MediaItem>> result, Bundle options);
         void onLoadItem(String itemId, Result<MediaBrowserCompat.MediaItem> result);
         void onSearch(String query, Bundle extras, Result<List<MediaBrowserCompat.MediaItem>> result);
@@ -1162,5 +1165,6 @@ public class AudioService extends MediaBrowserServiceCompat {
         void onTaskRemoved();
         void onClose();
         void onDestroy();
+        void onCreate();
     }
 }
